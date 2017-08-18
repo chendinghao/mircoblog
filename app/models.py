@@ -1,6 +1,7 @@
 #-*-coding:utf-8-*-  
 from app import db
 
+# 用户模型
 class User(db.Model):
     id = db.Column(db.Integer, primary_key = True)
     nickname = db.Column(db.String(64), index = True, unique = True)

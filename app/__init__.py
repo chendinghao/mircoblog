@@ -7,9 +7,8 @@ from config import basedir
 from flask import Flask
 from flask.ext.sqlalchemy import SQLAlchemy
 
-#
 app = Flask(__name__)
-app.config.from_object('config')
+app.config.from_object('config')    # 读取配置文件
 db = SQLAlchemy(app)
 
 

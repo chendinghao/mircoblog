@@ -47,6 +47,8 @@ def index():
     #     title = 'Sign In',
     #     form = form,
     #     providers = app.config['OPENID_PROVIDERS'])
+
+# 登录视图函数
 @app.route('/login', methods=['GET', 'POST'])
 @oid.loginhandler
 def login():
@@ -67,6 +69,7 @@ def login():
 def load_user(id):
     return User.query.get(int(id))
 
+# Flask-OpenID 登录回调
 @oid.after_login
 def after_login(resp):
     if resp.email is None or resp.email == "":
@@ -87,10 +90,12 @@ def after_login(resp):
     login_user(user, remember = remember_me)
     return redirect(request.args.get('next') or url_for('index'))
 
+# 在登录之前检查
 @app.before_request
 def before_request():
     g.user = current_user
 
+# 等出
 @app.route('/logout')
 def logout():
     logout_user()
