@@ -1,3 +1,11 @@
+#-*-coding:utf-8-*-  
+# views.py是视图函数，在这里使用模板 
+
+# 关于 FLASK.G
+# flask.g
+# Just store on this whatever you want. For example a database connection or the user that is currently logged in.
+# Starting with Flask 0.10 this is stored on the application context and no longer on the request context which means it becomes available if only the application context is bound and not yet a request.
+
 from flask import render_template, flash, redirect, session, url_for, request, g
 from flask.ext.login import login_user, logout_user, current_user, login_required
 from app import app, db, lm, oid
@@ -20,6 +28,8 @@ def index():
             'body': 'The Avengers movie was so cool!'
         }
     ]
+
+    # render_template（）函数需要传入模板名以及一些模板变量列表，返回一个所有变量被替换的渲染的模板
     return render_template("index.html",
         title = 'Home',
         user = user,
@@ -40,6 +50,7 @@ def index():
 @app.route('/login', methods=['GET', 'POST'])
 @oid.loginhandler
 def login():
+    # 如果是一个已经登录的用户，则返回到index界面
     if g.user is not None and g.user.is_authenticated():
         return redirect(url_for('index'))
     form = LoginForm()
@@ -51,6 +62,7 @@ def login():
                            form=form,
                            providers=app.config['OPENID_PROVIDERS'])
 
+# 用于从数据库加载用户
 @lm.user_loader
 def load_user(id):
     return User.query.get(int(id))
